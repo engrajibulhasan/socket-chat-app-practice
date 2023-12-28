@@ -39,6 +39,8 @@ bower_components
 build/Release
 
 # Dependency directories
+chat-socket-server/node_modules/
+chat-socket-client/node_modules/
 node_modules/
 jspm_packages/
 
