@@ -7,6 +7,7 @@ const app = express();
 app.use(cors());
 const server = createServer(app);
 const io = new Server(server, {
+  // connectionStateRecovery: {},
   path: "/chat-socket/",
   cors: {
     origin: "*",
@@ -22,20 +23,11 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log("A user connected");
 
-  //   receiving Message by this Event
-  socket.on("chat message", (msg) => {
+  // Listening from Client
+  socket.on("chat message", (msg, callback) => {
     console.log("Received:", msg);
-    // Now sent to others, also including sender
-    socket.emit("chat message", msg);
-    // socket.broadcast.emit(msg); // it will emmit instead of sender to all
-  });
-
-  //   Receiving request request
-  socket.on("request", (arg1, arg2, callback) => {
-    console.log("Love Request:", arg1, arg2);
-    callback({
-      status: "ok",
-    });
+    io.emit("chat message", msg);
+    callback();
   });
 
   socket.on("disconnect", () => {
