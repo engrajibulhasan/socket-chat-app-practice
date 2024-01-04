@@ -19,9 +19,20 @@ app.get("/", (req, res) => {
   res.send("<h1>Welcome Home</h1>");
 });
 
+io.use((socket, next) => {
+  const username = socket.handshake.auth.username;
+  const userId = socket.handshake.query.userId;
+  console.log("Midleware Auth Username:", username);
+  console.log("Midleware Query userId:", userId);
+  return next();
+});
+
 // Incoming Connection
 io.on("connection", (socket) => {
   console.log("A user connected");
+  const { username } = socket.handshake.auth;
+  const { userId } = socket.handshake.query;
+  0;
 
   // Listening from Client
   socket.on("chat message", (msg, callback) => {
